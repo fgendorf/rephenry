@@ -1,0 +1,17 @@
+{
+    "name": "fgendorf/rephenry",
+    "description": "Class to manage henry ponto/acesso",
+    "authors": [
+        {
+            "name": "Frederico Gendorf",
+            "email": "fgendorf@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "clue/socket-raw": "v1.2.0"
+    },
+    "autoload": {
+        "classmap": ["code/"]
+    }
+}
