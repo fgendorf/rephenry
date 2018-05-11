@@ -46,7 +46,7 @@ class REPRegistros extends REPHenry {
      * @return array
      */
     public function getInclusaoAlteracaoEmpresa($registros) {
-        $y=-1;
+        $y=0;
         for ($x = 0; sizeof($registros) > $x; ++$x) {
             if (substr($registros[$x], 9, 1) == 2) {
                 $regarray[$y]["NSR"] = substr($registros[$x], 0, 9);
@@ -71,7 +71,7 @@ class REPRegistros extends REPHenry {
      * @return array
      */
     public function getMarcacaoPonto($registros) {
-        $y=-1;
+        $y=0;
         for ($x = 0; sizeof($registros) > $x; ++$x) {
             if (substr($registros[$x], 9, 1) == 3) {
                 $regarray[$y]["NSR"] = substr($registros[$x], 0, 9);
@@ -92,7 +92,7 @@ class REPRegistros extends REPHenry {
      * @return array
      */
     public function getMarcacaoPontoMatricula($registros) {
-        $y=-1;
+        $y=0;
         for ($x = 0; sizeof($registros) > $x; ++$x) {
             if (substr($registros[$x], 9, 1) == 7) {
                 $regarray[$y]["NSR"] = substr($registros[$x], 0, 9);
@@ -113,7 +113,7 @@ class REPRegistros extends REPHenry {
      * @return array
      */
     public function getAjusteRelogio($registros) {
-        $y=-1;
+        $y=0;
         for ($x = 0; sizeof($registros) > $x; ++$x) {
             if (substr($registros[$x], 9, 1) == 4) {
                 $regarray[$y]["NSR"] = substr($registros[$x], 0, 9);
@@ -136,7 +136,7 @@ class REPRegistros extends REPHenry {
      * @return array
      */
     public function getInclusaoAlteracaoEmpregado($registros) {
-        $y=-1;
+        $y=0;
         for ($x = 0; sizeof($registros) > $x; ++$x) {
             if (substr($registros[$x], 9, 1) == 5) {
                 $regarray[$y]["NSR"] = substr($registros[$x], 0, 9);
