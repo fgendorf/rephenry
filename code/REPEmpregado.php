@@ -79,15 +79,16 @@ class REPEmpregado extends REPHenry {
         $listusers = array();
         do {
             $CMD = "00+RU+00+10]{$qnt}";
-            //echo $CMD.PHP_EOL;
             $ret = $this->queryREP($CMD);
             $chkcalc = ord($this->checkSum(substr($ret, 3, -2)));
             $chkrcv = ord(substr($ret, -2, 1));
             if ($chkcalc == $chkrcv) {
-                $proc = preg_split('/]/', trim(str_replace(chr(3), '', str_replace(chr(2), '', $ret))), 0);
+                $ret = substr($ret,0,-2);
+                $proc = preg_split('/]/',  str_replace(chr(2), '', $ret));
                 $cmds = preg_split('/\+/', $proc[0]);
                 $proc[0] = $cmds[4];
             }
+            print_r($proc);
             $listusers = array_merge($listusers, $proc);
             $qnt += 10;
         } while ($cmds[3] > 0);
