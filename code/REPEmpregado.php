@@ -88,7 +88,6 @@ class REPEmpregado extends REPHenry {
                 $cmds = preg_split('/\+/', $proc[0]);
                 $proc[0] = $cmds[4];
             }
-            print_r($proc);
             $listusers = array_merge($listusers, $proc);
             $qnt += 10;
         } while ($cmds[3] > 0);
