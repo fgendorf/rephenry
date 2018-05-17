@@ -24,7 +24,7 @@ class REPDigitais extends REPEmpregado {
         $chkcalc = ord($this->checkSum(substr($ret, 3, -2)));
         $chkrcv = ord(substr($ret, -2, 1));
         if ($chkcalc == $chkrcv) {
-            $proc = preg_split('/]/', substr(str_replace(chr(3), '', str_replace(chr(2), '', $ret)),0,-1));
+            $proc = preg_split('/]/', substr($ret,2,-2));
             array_shift($proc);
             
         }

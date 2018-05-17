@@ -70,7 +70,7 @@ class REPEmpregado extends REPHenry {
         return str_replace(chr(2), '', str_replace(chr(3), '', $ret));
     }
 
-    /**
+   /**
      * Metodo que retorna os empregados cadastrados no relogio
      * @return array
      */
@@ -78,25 +78,29 @@ class REPEmpregado extends REPHenry {
         $qnt = 0;
         $listusers = array();
         do {
-            $CMD = "00+RU+00+10]{$qnt}";
+            $CMD = "00+RU+00+1]{$qnt}";
             $ret = $this->queryREP($CMD);
+            //print_r($ret);
             $chkcalc = ord($this->checkSum(substr($ret, 3, -2)));
             $chkrcv = ord(substr($ret, -2, 1));
             if ($chkcalc == $chkrcv) {
-                $ret = substr($ret,0,-2);
-                $proc = preg_split('/]/',  str_replace(chr(2), '', $ret));
+                $ret = substr($ret, 2, -2);
+                //echo ' | ' . $chkrcv . ' - (' . substr($ret, -2, 1) . ')' . PHP_EOL;
+                $proc = preg_split('/]/', $ret);
                 $cmds = preg_split('/\+/', $proc[0]);
                 $proc[0] = $cmds[4];
             }
-            $listusers = array_merge($listusers, $proc);
-            $qnt += 10;
-        } while ($cmds[3] > 0);
-        array_pop($listusers);
+            if ($cmds[3] > 0) {
+                $listusers = array_merge($listusers, $proc);
+            }
+            $qnt += 1;
+        } while ($cmds[3] >= 0);
         $y = -1;
         for ($x = 0; sizeof($listusers) > $x; ++$x) {
             ++$y;
             $regarray[$y] = array_combine(array('pis', 'nome', 'biometria', 'nmatriculas', 'matriculas'), preg_split('/\[/', $listusers[$x]));
         }
+        //print_r($regarray);
         return $regarray;
     }
 
@@ -110,7 +114,7 @@ class REPEmpregado extends REPHenry {
      */
     public function deleteEmpregado() {
         $ret = $this->queryREP("00+EU+00+1+E[{$this->pisEmpregado}[{$this->nomeEmpregado}[{$this->biometriaEmpregado}[1[{$this->matriculaEmpregado}");
-        return str_replace(chr(2), '', str_replace(chr(3), '', $ret));
+        return substr($ret,2,-2);
     }
 
 }

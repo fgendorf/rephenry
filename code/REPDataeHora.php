@@ -61,7 +61,7 @@ class REPDataeHora extends REPHenry {
      */
     public function getHoraRelogio() {
         $ret = $this->queryREP("00+RH+00");
-        return str_replace(chr(2), '', str_replace(chr(3), '', $ret));
+        return substr($ret,2,-2);
     }
 
     /**
@@ -75,7 +75,7 @@ class REPDataeHora extends REPHenry {
             $this->setFimHorarioVerao("00/00/00");
         }
         $ret = $this->queryREP("00+EH+00+{$this->horaCerta}]{$this->inicioHorarioVerao}]{$this->fimHorarioVerao}");
-        return str_replace(chr(2), '', str_replace(chr(3), '', $ret));
+        return substr($ret,2,-2);
     }
 
 }
