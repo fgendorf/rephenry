@@ -31,7 +31,7 @@ class REPDataeHora extends REPHenry {
      * Setter horaCerta
      * @param string $horaCerta 
      */
-    public function setHoraCerta($horaCerta) {
+    public function setHoraCerta($horaCerta = "") {
         if (empty($horaCerta)) {
             $this->horaCerta = date("d/m/y H:i:s");
         } else {
@@ -61,7 +61,7 @@ class REPDataeHora extends REPHenry {
      */
     public function getHoraRelogio() {
         $ret = $this->queryREP("00+RH+00");
-        return substr($ret,2,-2);
+        return substr($ret, 2, -2);
     }
 
     /**
@@ -69,13 +69,12 @@ class REPDataeHora extends REPHenry {
      * @return string
      */
     public function ajustaHoraRelogio() {
-        $this->setHoraCerta();
         if (empty($this->inicioHorarioVerao)) {
             $this->setInicioHorarioVerao("00/00/00");
             $this->setFimHorarioVerao("00/00/00");
         }
         $ret = $this->queryREP("00+EH+00+{$this->horaCerta}]{$this->inicioHorarioVerao}]{$this->fimHorarioVerao}");
-        return substr($ret,2,-2);
+        return substr($ret, 2, -2);
     }
 
 }
