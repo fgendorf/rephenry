@@ -70,13 +70,14 @@ class REPEmpregado extends REPHenry {
         return str_replace(chr(2), '', str_replace(chr(3), '', $ret));
     }
 
-   /**
+    /**
      * Metodo que retorna os empregados cadastrados no relogio
      * @return array
      */
     public function listaEmpregados() {
         $qnt = 0;
         $listusers = array();
+        $regarray = false;
         do {
             $CMD = "00+RU+00+1]{$qnt}";
             $ret = $this->queryREP($CMD);
@@ -88,7 +89,7 @@ class REPEmpregado extends REPHenry {
                 //echo ' | ' . $chkrcv . ' - (' . substr($ret, -2, 1) . ')' . PHP_EOL;
                 $proc = preg_split('/]/', $ret);
                 $cmds = preg_split('/\+/', $proc[0]);
-                $proc[0] = $cmds[4];
+                $proc[0] = $cmds[4] ?? false;
             }
             if ($cmds[3] > 0) {
                 $listusers = array_merge($listusers, $proc);
@@ -114,7 +115,7 @@ class REPEmpregado extends REPHenry {
      */
     public function deleteEmpregado() {
         $ret = $this->queryREP("00+EU+00+1+E[{$this->pisEmpregado}[{$this->nomeEmpregado}[{$this->biometriaEmpregado}[1[{$this->matriculaEmpregado}");
-        return substr($ret,2,-2);
+        return substr($ret, 2, -2);
     }
 
 }

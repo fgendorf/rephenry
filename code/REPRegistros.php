@@ -24,13 +24,14 @@ class REPRegistros extends REPHenry {
      */
     public function coletaRegistrosPonto() {
         $idinit = $this->idSequencial;
+        $resp = '';
         do {
             $ret = $this->queryREP("00+RR+00+N]10]{$idinit}");
             $ret2 = substr($ret, 3,-2);
             $proc = preg_split('/]/', $ret2);
             $chkcalc = ord($this->checkSum(substr($ret, 3, -2)));
             $chkrcv = ord(substr($ret, -2, 1));
-            if ($chkcalc == $chkrcv) {
+            if (!empty($proc[1]) && $chkcalc == $chkrcv) {
                 $resp .= $proc[1];
             }
             $idinit += 10;
@@ -47,6 +48,7 @@ class REPRegistros extends REPHenry {
      */
     public function getInclusaoAlteracaoEmpresa($registros) {
         $y=0;
+        $regarray = false;
         for ($x = 0; sizeof($registros) > $x; ++$x) {
             if (substr($registros[$x], 9, 1) == 2) {
                 $regarray[$y]["NSR"] = substr($registros[$x], 0, 9);
@@ -72,6 +74,7 @@ class REPRegistros extends REPHenry {
      */
     public function getMarcacaoPonto($registros) {
         $y=0;
+        $regarray = false;
         for ($x = 0; sizeof($registros) > $x; ++$x) {
             if (substr($registros[$x], 9, 1) == 3) {
                 $regarray[$y]["NSR"] = substr($registros[$x], 0, 9);
@@ -93,6 +96,7 @@ class REPRegistros extends REPHenry {
      */
     public function getMarcacaoPontoMatricula($registros) {
         $y=0;
+        $regarray = false;
         for ($x = 0; sizeof($registros) > $x; ++$x) {
             if (substr($registros[$x], 9, 1) == 7) {
                 $regarray[$y]["NSR"] = substr($registros[$x], 0, 9);

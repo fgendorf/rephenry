@@ -29,7 +29,11 @@ class REPHenry {
     public function connect() {
         $this->socket = $this->factory->createClient("{$this->server}:{$this->port}");
     }
-
+    /**
+     * Genarate param Length
+     * @param type $data
+     * @return string
+     */
     function generateParamLength($data) {
         $paramLength = strlen($data);
         $h1 = $paramLength % 256;
@@ -37,7 +41,11 @@ class REPHenry {
         $h1Str = chr(($h1)) . chr(($h16));
         return $h1Str;
     }
-
+    /**
+     * Checksum protocolo Henry
+     * @param type $data
+     * @return type
+     */
     public function checkSum($data) {
         $i;
         $check = 0;
@@ -53,7 +61,12 @@ class REPHenry {
         $h1 = $check % 16;
         return chr(hexdec(substr($this->hex, $h16, 1) . substr($this->hex, $h1, 1)));
     }
-
+    
+    /**
+     * Formata texto para enviar para o relógio
+     * @param type $data
+     * @return type
+     */
     public function textFormat($data) {
         $BYTE_INIT = chr(2);
         $BYTE_END = chr(3);
@@ -63,10 +76,14 @@ class REPHenry {
         $str .= $data;
         $str .= $this->checkSum($data);
         $str .= $BYTE_END;
-
         return $str;
     }
 
+    /**
+     * String to hex do protocolo henry
+     * @param type $string
+     * @return type
+     */
     public function strToHex($string) {
         $hex = '';
         for ($i = 0; $i < strlen($string); $i++) {
@@ -83,9 +100,10 @@ class REPHenry {
      * @return string
      */
     public function queryREP($cmd) {
+        $data = '';
         $this->socket->write($this->textFormat($cmd));
         do {
-            $d = $this->socket->read(128);
+            $d = $this->socket->read(1);
             $data .= $d;
         } while (substr($d,-1,1)!=chr(3));
         return $data;

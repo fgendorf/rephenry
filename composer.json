@@ -8,7 +8,7 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=7.4",
         "clue/socket-raw": "v1.2.0"
     },
     "autoload": {
