@@ -26,15 +26,16 @@ class REPRegistros extends REPHenry {
         $idinit = $this->idSequencial;
         $resp = '';
         do {
-            $ret = $this->queryREP("00+RR+00+N]10]{$idinit}");
+            $ret = $this->queryREP("00+RR+00+N]02]{$idinit}");
             $ret2 = substr($ret, 3,-2);
             $proc = preg_split('/]/', $ret2);
             $chkcalc = ord($this->checkSum(substr($ret, 3, -2)));
             $chkrcv = ord(substr($ret, -2, 1));
+            
             if (!empty($proc[1]) && $chkcalc == $chkrcv) {
                 $resp .= $proc[1];
             }
-            $idinit += 10;
+            $idinit += 2;
         } while ($proc[0] != "00+RR+113");
         $registros = (explode("\n", $resp));
         return $registros;
