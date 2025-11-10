@@ -3,8 +3,6 @@
 /**
  * Classe de comunicação com relogios ponto HENRY versão 8x
  */
-
-
 class REPHenry {
 
     protected $almostAscii = ' !"#$%&' . "'" . '()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[' . '\\' . ']^_`abcdefghijklmnopqrstuvwxyz{|}';
@@ -29,6 +27,7 @@ class REPHenry {
     public function connect() {
         $this->socket = $this->factory->createClient("{$this->server}:{$this->port}");
     }
+
     /**
      * Genarate param Length
      * @param type $data
@@ -41,27 +40,45 @@ class REPHenry {
         $h1Str = chr(($h1)) . chr(($h16));
         return $h1Str;
     }
+
     /**
      * Checksum protocolo Henry
      * @param type $data
      * @return type
      */
+//    public function checkSum($data) {
+//        $i;
+//        $check = 0;
+//        $paramLength = strlen($data);
+//        for ($i = 0; $i < $paramLength; $i++) {
+//            $textPos = substr($data, $i, 1);
+//            $val = ord($textPos);
+//            $check ^= $val;
+//        }
+//        $check ^= ( $paramLength % 256);
+//        $check ^= intval( $paramLength / 256);
+//        $h16 = floor($check / 16);
+//        $h1 = $check % 16;
+//        return chr(hexdec(substr($this->hex, $h16, 1) . substr($this->hex, $h1, 1)));
+//    }
     public function checkSum($data) {
-        $i;
         $check = 0;
         $paramLength = strlen($data);
+
+        // 1. Loop otimizado (usando $data[$i])
         for ($i = 0; $i < $paramLength; $i++) {
-            $textPos = substr($data, $i, 1);
-            $val = ord($textPos);
+            $val = ord($data[$i]);
             $check ^= $val;
         }
-        $check ^= ( $paramLength % 256);
-        $check ^= ( $paramLength / 256);
-        $h16 = floor($check / 16);
-        $h1 = $check % 16;
-        return chr(hexdec(substr($this->hex, $h16, 1) . substr($this->hex, $h1, 1)));
+
+        // 2. XOR do tamanho (otimizado com bitshift)
+        $check ^= ($paramLength % 256);
+        $check ^= ($paramLength >> 8); // O mesmo que intval($paramLength / 256)
+        // 3. Retorno corrigido e simplificado
+        // Não precisamos de $h16, $h1, ou $this->hex
+        return chr($check & 0xFF);
     }
-    
+
     /**
      * Formata texto para enviar para o relógio
      * @param type $data
@@ -105,8 +122,7 @@ class REPHenry {
         do {
             $d = $this->socket->read(1);
             $data .= $d;
-        } while (substr($d,-1,1)!=chr(3));
+        } while (substr($d, -1, 1) != chr(3));
         return $data;
     }
-
 }
